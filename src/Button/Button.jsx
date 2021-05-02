@@ -1,8 +1,10 @@
 import scss from './Button.module.scss';
+import Spinner from 'react-bootstrap/Spinner';
 
-const Button = () => {
+const Button = ({ onClick, isLoading }) => {
   return (
-    <button type='button' className={scss.Button}>
+    <button type='button' onClick={onClick} className={scss.Button}>
+      {isLoading && <Spinner as='span' animation='border' size='sm' role='status' aria-hidden='true' />}
       Load more
     </button>
   );
