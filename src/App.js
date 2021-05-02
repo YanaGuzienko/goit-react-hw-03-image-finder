@@ -4,6 +4,7 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 import Modal from './Modal/Modal';
 import Button from './Button/Button';
+import Loader from './Loader/Loader';
 
 // import { BASE_URL } from './Api/Api';
 
@@ -45,6 +46,7 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         }));
       })
+      .catch(())
       .finally(() =>
         this.setState({
           isLoading: false,
@@ -70,6 +72,7 @@ class App extends Component {
   };
 
   render() {
+    const shouldRenderLoadMore = this.state.img.length > 0;
     return (
       <>
         {this.state.showModal && (
@@ -84,7 +87,11 @@ class App extends Component {
           </ImageGallery>
         )}
 
-        {this.state.name && <Button onClick={this.fetchImg} isLoading={this.state.isLoading} />}
+        {shouldRenderLoadMore && (
+          <Button onClick={this.fetchImg}>
+            <Loader isLoading={this.state.isLoading} />
+          </Button>
+        )}
       </>
     );
   }
