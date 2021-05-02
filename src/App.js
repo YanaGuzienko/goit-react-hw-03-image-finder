@@ -3,6 +3,7 @@ import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 import Modal from './Modal/Modal';
+import Button from './Button/Button';
 // import { BASE_URL } from './Api/Api';
 
 class App extends Component {
@@ -12,18 +13,14 @@ class App extends Component {
     largeUrl: '',
   };
 
-  toggleModal = (e) => {
-    console.log(e.currentTarget);
+  onClickImg = (url) => {
+    this.setState({
+      largeUrl: url,
+    });
     this.setState((state) => ({
       showModal: !state.showModal,
     }));
   };
-
-  // getUrl = (url) => {
-  //   this.setState({
-  //     largeUrl: url,
-  //   });
-  // };
 
   onSearchSubmit = (data) => {
     this.setState({
@@ -35,14 +32,15 @@ class App extends Component {
     return (
       <>
         {this.state.showModal && (
-          <Modal showModal={this.toggleModal}>
-            <img src='' alt='' />
+          <Modal showModal={this.onClickImg}>
+            <img src={this.state.largeUrl} alt={this.state.name} />
           </Modal>
         )}
         <Searchbar onSubmit={this.onSearchSubmit} />
         <ImageGallery>
-          <ImageGalleryItem imgName={this.state.name} showModal={this.toggleModal} getUrl={this.getUrl} />
+          <ImageGalleryItem imgName={this.state.name} showModal={this.onClickImg} getUrl={this.getUrl} />
         </ImageGallery>
+        {this.state.name && <Button />}
       </>
     );
   }

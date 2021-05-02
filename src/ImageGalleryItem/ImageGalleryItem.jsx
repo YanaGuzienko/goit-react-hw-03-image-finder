@@ -5,6 +5,7 @@ class ImageGalleryItem extends Component {
   state = {
     name: '',
     img: [],
+    largeUrl: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,19 +33,16 @@ class ImageGalleryItem extends Component {
     }
   }
 
-  onClickImg = (e) => {
-    console.log(e.currentTarget);
-  };
-
   render() {
     return (
       <>
         {this.state.name && (
           <>
             {this.state.img.map((item) => (
-              <li className={scss.ImageGalleryItem} key={this.state.id}>
+              <li className={scss.ImageGalleryItem} key={item.id}>
                 <img
-                  onClick={this.props.showModal}
+                  largeurl={item.largeUrl}
+                  onClick={() => this.props.showModal(item.largeUrl)}
                   src={item.url}
                   alt={this.state.name}
                   className={scss.ImageGalleryItem__image}

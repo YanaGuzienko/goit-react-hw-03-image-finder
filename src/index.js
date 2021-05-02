@@ -5,7 +5,7 @@ import './main.scss';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App className='App' />
+    <App className={App} />
   </React.StrictMode>,
   document.getElementById('root')
 );
