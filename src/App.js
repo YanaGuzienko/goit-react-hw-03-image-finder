@@ -16,6 +16,7 @@ class App extends Component {
     largeUrl: '',
     currentPage: 1,
     isLoading: false,
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,12 +47,18 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         }));
       })
-      .catch(())
-      .finally(() =>
+      .catch((error) => this.setState({ error }))
+      .finally(() => {
+        if (this.state.currentPage > 2) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
         this.setState({
           isLoading: false,
-        })
-      );
+        });
+      });
   };
 
   onClickImg = (url) => {
@@ -73,6 +80,8 @@ class App extends Component {
 
   render() {
     const shouldRenderLoadMore = this.state.img.length > 0;
+    const noImgToShow = this.state.img.length <= 0;
+
     return (
       <>
         {this.state.showModal && (
@@ -81,6 +90,8 @@ class App extends Component {
           </Modal>
         )}
         <Searchbar onSubmit={this.onSearchSubmit} />
+        {this.state.error && <h1>Oops ... Something went wrong ... try again</h1>}
+
         {this.state.name && (
           <ImageGallery>
             <ImageGalleryItem showModal={this.onClickImg} imgData={this.state.img} name={this.state.name} />
