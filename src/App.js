@@ -1,4 +1,8 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
@@ -6,9 +10,25 @@ import Modal from './Modal/Modal';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 
-// import { BASE_URL } from './Api/Api';
+import api from './Api/Api';
 
 class App extends Component {
+  static propTypes = {
+    img: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        largeUrl: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      })
+    ),
+    name: PropTypes.string,
+    showModal: PropTypes.bool,
+    largeUrl: PropTypes.string,
+    currentPage: PropTypes.number,
+    isLoading: PropTypes.bool,
+    error: PropTypes.object,
+  };
+
   state = {
     img: [],
     name: '',
@@ -30,10 +50,8 @@ class App extends Component {
       isLoading: true,
     });
 
-    fetch(
-      `https://pixabay.com/api/?q=${this.state.name}&page=${this.state.currentPage}&key=20626801-2d87cc5d65955ac685972c705&image_type=photo&orientation=horizontal&per_page=12`
-    )
-      .then((response) => response.json())
+    api
+      .fetchImages(this.state.name, this.state.currentPage)
       .then(({ hits }) => {
         const obj = hits.map((item) => {
           return {
@@ -47,13 +65,19 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         }));
       })
-      .catch((error) => this.setState({ error }))
+      .catch((error) => {
+        this.setState({ error });
+        toast.error('Oops ... Something went wrong ... try again');
+      })
       .finally(() => {
         if (this.state.currentPage > 2) {
           window.scrollTo({
             top: document.documentElement.scrollHeight,
             behavior: 'smooth',
           });
+        }
+        if (this.state.img.length === 0) {
+          toast.error('Enter the correct name');
         }
         this.setState({
           isLoading: false,
@@ -80,7 +104,6 @@ class App extends Component {
 
   render() {
     const shouldRenderLoadMore = this.state.img.length > 0;
-    const noImgToShow = this.state.img.length <= 0;
 
     return (
       <>
@@ -103,6 +126,7 @@ class App extends Component {
             <Loader isLoading={this.state.isLoading} />
           </Button>
         )}
+        <ToastContainer position='top-center' autoClose={3000} />
       </>
     );
   }

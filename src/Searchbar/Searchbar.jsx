@@ -1,7 +1,12 @@
 import scss from './Searchbar.module.scss';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Searchbar extends Component {
+  static propTypes = {
+    name: PropTypes.string,
+  };
+
   state = {
     name: '',
   };

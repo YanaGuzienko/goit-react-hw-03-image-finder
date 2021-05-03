@@ -1,4 +1,5 @@
 import scss from './ImageGalleryItem.module.scss';
+import PropTypes from 'prop-types';
 
 const ImageGalleryItem = ({ imgData, showModal, name }) => {
   return (
@@ -15,6 +16,18 @@ const ImageGalleryItem = ({ imgData, showModal, name }) => {
       ))}
     </>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  imgData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      largeUrl: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    })
+  ),
+  showModal: PropTypes.func,
+  name: PropTypes.string,
 };
 
 export default ImageGalleryItem;
